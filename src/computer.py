@@ -31,8 +31,10 @@ def test_guess(guess, good_code, colors):
             colors_guess[guess[i]]    += 1
     
     for i in range(colors):
-        if colors_good[i] == colors_guess[i]:
+        if colors_good[i] <= colors_guess[i]:
             result[0] += colors_good[i]
+        else:
+            result[0] += colors_guess[i]
 
     return result
 
