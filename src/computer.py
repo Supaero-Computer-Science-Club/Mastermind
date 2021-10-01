@@ -11,9 +11,14 @@ def mastermind(code_length, colors, guess_alg):
 
     #generates a random code
     code = [randint(0, colors-1) for i in range(0, code_length)]
-
-    if(guess_alg == "default"):
-        nb_tries = minmax(code, colors)
+    
+    if(guess_alg == "minmax"):
+        #generates a random first guess
+        first_code = [randint(0, colors-1) for i in range(0, code_length)]
+        nb_tries, code_found = minmax(code, code_length, colors, first_code)
+        #sanity check
+        if code_found != code:
+            raise Exception("Ton code marche pas gros débile")
     
     return nb_tries
 
@@ -59,9 +64,20 @@ def test_guess(guess, good_code, colors):
 """
 
 
-def minmax(code, code_length, colors):
+def minmax(code, code_length = 4, colors = 6, first_code = [0, 0, 1, 1]):
 
     nb_tries = 0
+
+    #gestion des exceptions
+    if len(code) != code_length:
+        raise Exception("Secret code length does not match code length")
+    if len(first_code) != code_length:
+        raise Exception("First code length does not match code length")
+    for i in range(len(code)):
+        if code[i] > colors - 1:
+            raise Exception("Secret code has too many colors")
+        if first_code[i] > colors - 1:
+            raise Exception("First code has too many colors")
     #generates all possible codes for this number of colors and length of code
     all_codes = generate_all_codes(code_length, colors)
     #S* set of possible winning codes
@@ -69,7 +85,7 @@ def minmax(code, code_length, colors):
     #list of tried codes
     failed_guesses = []
     #code to try
-    code2try = [0, 0, 1, 1]
+    code2try = first_code
     
     is_won = False;
     while(not is_won):
@@ -99,10 +115,12 @@ def minmax(code, code_length, colors):
                         break
                 
                 if(not already_tried):
-                    hit_count = [0 for i in range(int((code_length+1)*(code_length+2)/2))]
+                    hit_count = \
+                    [0 for i in range(int((code_length+1)*(code_length+2)/2))]
                     for g2 in winning_codes:
                         code_result = test_guess(guess, g2, colors)
-                        index = code_result[1]*code_length - int(code_result[1]*(code_result[1]-1)/2) \
+                        index = code_result[1]*code_length \
+                                - int(code_result[1]*(code_result[1]-1)/2) \
                                 + code_result[1] + code_result[0]
                         hit_count[index] += 1
                         max_hit = len(winning_codes) - max(hit_count)
@@ -118,14 +136,6 @@ def minmax(code, code_length, colors):
                 code2try = min(minmax_set)
 
     return nb_tries, code2try
-
-def find_common_elements(list1, list2):
-    L = []
-    for x in list1:
-        for y in list2:
-            if x == y:
-                L.append(x)
-    return L
 
 """
 
@@ -169,4 +179,17 @@ def index2code(index, code_length, colors):
         L[code_length - i - 1] = b
     return L
 
-print(minmax([4, 2, 1, 3], 4, 6))
+"""
+
+    Tools
+
+"""
+
+
+def find_common_elements(list1, list2):
+    L = []
+    for x in list1:
+        for y in list2:
+            if x == y:
+                L.append(x)
+    return L
