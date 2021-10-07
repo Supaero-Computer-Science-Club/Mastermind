@@ -104,6 +104,7 @@ def minmax(code, code_length = 4, colors = 6, first_code = [0, 0, 1, 1]):
                 else:
                     i += 1
             
+            #TODO : commentary
             # find the next code to try
             minmax_value = -1
             minmax_set = []

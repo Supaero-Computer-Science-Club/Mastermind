@@ -1,6 +1,6 @@
 import sys
-from src import computer
-from src import human
+import computer
+import human
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
     tries = 10
     players = 2
     cpu_only = True #TODO : change to False by default
-    guess_alg = "minmax"
+    guess_alg = "minmax"    
 
     """
     Command line arguments :
@@ -35,7 +35,7 @@ def main():
     """
     args = sys.argv[1: ]
 
-    while len(args > 0):
+    while len(args) > 0:
 
         if(args[0] == "-c"):
             args.pop(0)
@@ -71,7 +71,7 @@ def main():
         else: args.pop(0)
     
     if(cpu_only):
-        computer.mastermind(code_length, colors, guess_alg)
+        print(computer.mastermind(code_length, colors, guess_alg));
     else:
         human.mastermind(code_length, colors, tries, players)
 
