@@ -124,12 +124,12 @@ def minmax(code, code_length = 4, colors = 6, first_code = [0, 0, 1, 1]):
                                 - int(code_result[1]*(code_result[1]-1)/2) \
                                 + code_result[1] + code_result[0]
                         hit_count[index] += 1
-                        max_hit = len(winning_codes) - max(hit_count)
-                        if max_hit > minmax_value:
-                            minmax_value = max_hit
-                            minmax_set = [guess]
-                        elif max_hit == minmax_value:
-                            minmax_set.append(guess)
+                    max_hit = len(winning_codes) - max(hit_count)
+                    if max_hit > minmax_value:
+                        minmax_value = max_hit
+                        minmax_set = [guess]
+                    elif max_hit == minmax_value:
+                        minmax_set.append(guess)
             winning_in_minmax = find_common_elements(winning_codes, minmax_set)
             if len(winning_in_minmax) != 0:
                 code2try = min(winning_in_minmax)
